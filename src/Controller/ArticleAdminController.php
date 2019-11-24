@@ -99,4 +99,11 @@ class ArticleAdminController extends BaseController {
 			'articles' => $articles,
 		]);
 	}
+
+	/**
+	 * @Route("/admin/upload/test", name="upload_test")
+	 */
+	public function temporaryUploadFunction(Request $request){
+
+	}
 }
