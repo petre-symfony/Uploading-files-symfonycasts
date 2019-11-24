@@ -104,6 +104,6 @@ class ArticleAdminController extends BaseController {
 	 * @Route("/admin/upload/test", name="upload_test")
 	 */
 	public function temporaryUploadFunction(Request $request){
-
+		dd($request->files->get('image'));
 	}
 }
