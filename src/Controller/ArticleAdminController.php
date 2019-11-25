@@ -109,7 +109,8 @@ class ArticleAdminController extends BaseController {
 		$uploadFile = $request->files->get('image');
 		$destination = $this->getParameter('kernel.project_dir').'/public/uploads';
 
-		$newFilename = uniqid().'-'.$uploadFile->getClientOriginalName();
+		$originalFilename = pathinfo($uploadFile->getClientOriginalName(), PATHINFO_FILENAME);
+		$newFilename = $originalFilename . '-' . uniqid().'.'.$uploadFile->guessExtension();
 
 		dd($uploadFile->move(
 			$destination,
