@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Form\ArticleFormType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Sluggable\Util\Urlizer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -110,7 +111,7 @@ class ArticleAdminController extends BaseController {
 		$destination = $this->getParameter('kernel.project_dir').'/public/uploads';
 
 		$originalFilename = pathinfo($uploadFile->getClientOriginalName(), PATHINFO_FILENAME);
-		$newFilename = $originalFilename . '-' . uniqid().'.'.$uploadFile->guessExtension();
+		$newFilename = Urlizer::urlize($originalFilename) . '-' . uniqid().'.'.$uploadFile->guessExtension();
 
 		dd($uploadFile->move(
 			$destination,
