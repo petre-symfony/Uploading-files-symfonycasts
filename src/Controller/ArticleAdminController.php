@@ -8,6 +8,7 @@ use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -104,6 +105,10 @@ class ArticleAdminController extends BaseController {
 	 * @Route("/admin/upload/test", name="upload_test")
 	 */
 	public function temporaryUploadFunction(Request $request){
-		dd($request->files->get('image'));
+		/** @var UploadedFile $uploadFile */
+		$uploadFile = $request->files->get('image');
+		$destination = $this->getParameter('kernel.project_dir').'/public/uploads';
+
+		dd($uploadFile->move($destination));
 	}
 }
