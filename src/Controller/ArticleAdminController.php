@@ -53,17 +53,18 @@ class ArticleAdminController extends BaseController {
 		if ($form->isSubmitted() && $form->isValid()) {
 			/** @var UploadedFile $uploadFile */
 			$uploadedFile = $form['imageFile']->getData();
-			$destination = $this->getParameter('kernel.project_dir').'/public/uploads/article_image';
+			if($uploadedFile) {
+				$destination = $this->getParameter('kernel.project_dir') . '/public/uploads/article_image';
 
-			$originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-			$newFilename = Urlizer::urlize($originalFilename) . '-' . uniqid().'.'.$uploadedFile->guessExtension();
+				$originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+				$newFilename = Urlizer::urlize($originalFilename) . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
 
-			$uploadedFile->move(
-				$destination,
-				$newFilename
-			);
-			$article->setImageFilename($newFilename);
-
+				$uploadedFile->move(
+					$destination,
+					$newFilename
+				);
+				$article->setImageFilename($newFilename);
+			}
 			$em->persist($article);
 			$em->flush();
 
