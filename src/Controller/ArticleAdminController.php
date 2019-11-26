@@ -51,6 +51,7 @@ class ArticleAdminController extends BaseController {
 
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
+			dd($form['imageFile']->getData());
 			$em->persist($article);
 			$em->flush();
 

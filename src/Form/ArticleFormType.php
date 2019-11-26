@@ -48,7 +48,9 @@ class ArticleFormType extends AbstractType {
 				],
 				'required' => false,
 			])
-			->add('imageFilename', FileType::class);
+			->add('imageFile', FileType::class,  [
+				'mapped' => false
+			]);
 		;
 
 		if ($options['include_published_at']) {
