@@ -48,23 +48,34 @@ class ArticleFormType extends AbstractType {
 				],
 				'required' => false,
 			])
-			->add('imageFile', FileType::class,  [
-				'mapped' => false,
-				'required' => false,
-				'constraints' => [
-					new Image([
-						'maxSize' => '5M'
-					]),
-					new NotNull()
-				]
-			]);
 		;
 
+		$imageConstraints = [
+			new Image([
+				'maxSize' => '5M'
+			])
+		];
+
+		if(!$isEdit || !$article->getImageFilename()){
+			$imageConstraints[] = new NotNull([
+				'message' => 'Please upload an image'
+			]);
+		}
+
+		$builder->
+			add('imageFile', FileType::class,  [
+				'mapped' => false,
+				'required' => false,
+				'constraints' => $imageConstraints
+		]);
+
+		
 		if ($options['include_published_at']) {
 			$builder->add('publishedAt', null, [
 				'widget' => 'single_text',
 			]);
 		}
+
 
 		$builder->addEventListener(
 			FormEvents::PRE_SET_DATA,
