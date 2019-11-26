@@ -51,7 +51,9 @@ class ArticleFormType extends AbstractType {
 				'mapped' => false,
 				'required' => false,
 				'constraints' => [
-					new Image()
+					new Image([
+						'maxSize' => '5M'
+					])
 				]
 			]);
 		;
