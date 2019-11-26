@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class ArticleFormType extends AbstractType {
 	private $userRepository;
@@ -53,7 +54,8 @@ class ArticleFormType extends AbstractType {
 				'constraints' => [
 					new Image([
 						'maxSize' => '5M'
-					])
+					]),
+					new NotNull()
 				]
 			]);
 		;
