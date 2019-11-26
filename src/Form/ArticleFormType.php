@@ -69,7 +69,7 @@ class ArticleFormType extends AbstractType {
 				'constraints' => $imageConstraints
 		]);
 
-		
+
 		if ($options['include_published_at']) {
 			$builder->add('publishedAt', null, [
 				'widget' => 'single_text',
