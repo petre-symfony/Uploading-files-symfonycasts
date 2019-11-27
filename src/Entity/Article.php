@@ -166,7 +166,7 @@ class Article {
 	}
 
 	public function getImagePath() {
-		return 'images/'.$this->getImageFilename();
+		return 'uploads/article_image/'.$this->getImageFilename();
 	}
 
 	/**
