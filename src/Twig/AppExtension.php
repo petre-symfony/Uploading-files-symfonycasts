@@ -16,6 +16,12 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 		$this->container = $container;
 	}
 
+	public function getFunctions(): array {
+		return [
+			new TwigFunction('uploaded_asset', [$this, 'getUploadedAssetPath'])
+		];
+	}
+
 	public function getFilters(): array {
 		return [
 			new TwigFilter('cached_markdown', [$this, 'processMarkdown'], ['is_safe' => ['html']]),
@@ -32,5 +38,9 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 		return [
 			MarkdownHelper::class,
 		];
+	}
+
+	public function getUploadedAssetPath(string $path):string {
+
 	}
 }

@@ -32,4 +32,8 @@ class UploaderHelper {
 		
 		return $newFilename;
 	}
+
+	public function getPublicPath(string $path):string{
+		return 'uploads/'. $path;
+	}
 }
