@@ -8,6 +8,7 @@ use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploaderHelper {
+	const ARTICLE_IMAGE = 'article_image';
 
 	/**
 	 * @var string
