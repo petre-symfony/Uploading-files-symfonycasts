@@ -21,6 +21,15 @@ class ArticleFixtures extends BaseFixture implements DependentFixtureInterface {
 		'lightspeed.png',
 	];
 
+    /**
+     * @var UploaderHelper
+     */
+    private $uploaderHelper;
+
+    public function __construct(UploaderHelper $uploaderHelper) {
+        $this->uploaderHelper = $uploaderHelper;
+    }
+    
 	protected function loadData(ObjectManager $manager) {
 		$this->createMany(10, 'main_articles', function($count) use ($manager) {
 			$article = new Article();
