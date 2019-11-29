@@ -32,9 +32,14 @@ class UploaderHelper {
 
 	public function uploadArticleImage(File $file):string {
 		$destination = $this->uploadsPath . '/article_image';
-		
-		$originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-		$newFilename = Urlizer::urlize($originalFilename) . '-' . uniqid() . '.' . $file->guessExtension();
+
+        if($file instanceof UploadedFile) {
+            $originalFilename = $file->getClientOriginalName();
+        } else {
+            $originalFilename = $file->getFilename();
+        }
+
+		$newFilename = Urlizer::urlize(pathinfo($originalFilename, PATHINFO_FILENAME)) . '-' . uniqid() . '.' . $file->guessExtension();
 
         $file->move(
 			$destination,
