@@ -9,6 +9,7 @@ use App\Service\UploaderHelper;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use phpDocumentor\Reflection\Types\Self_;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 
 
@@ -64,8 +65,12 @@ EOF
 				}
 
                 $randomImage = $this->faker->randomElement(self::$articleImages);
+                $fs = new Filesystem();
+                $targetPath = sys_get_temp_dir().'/'.$randomImage;
+                $fs->copy(__DIR__.'/images/'.$randomImage, $targetPath, true);
+
                 $imageFilename = $this->uploaderHelper
-                    ->uploadArticleImage(new File(__DIR__.'/images/'.$randomImage));
+                    ->uploadArticleImage(new File($targetPath));
 
 				$article->setAuthor($this->getRandomReference('main_users'))
 					->setHeartCount($this->faker->numberBetween(5, 100))
