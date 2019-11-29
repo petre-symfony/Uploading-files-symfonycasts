@@ -7,6 +7,9 @@ use App\Entity\Comment;
 use App\Entity\Tag;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use phpDocumentor\Reflection\Types\Self_;
+use Symfony\Component\HttpFoundation\File\File;
+
 
 class ArticleFixtures extends BaseFixture implements DependentFixtureInterface {
 	private static $articleTitles = [
@@ -29,7 +32,7 @@ class ArticleFixtures extends BaseFixture implements DependentFixtureInterface {
     public function __construct(UploaderHelper $uploaderHelper) {
         $this->uploaderHelper = $uploaderHelper;
     }
-    
+
 	protected function loadData(ObjectManager $manager) {
 		$this->createMany(10, 'main_articles', function($count) use ($manager) {
 			$article = new Article();
@@ -59,9 +62,13 @@ EOF
 					$article->setPublishedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
 				}
 
+                $randomImage = $this->faker->randomElement(self::$articleImages);
+                $imageFilename = $this->uploaderHelper
+                    ->uploadArticleImage(new File(__DIR__.'/images/'.$randomImage));
+
 				$article->setAuthor($this->getRandomReference('main_users'))
 					->setHeartCount($this->faker->numberBetween(5, 100))
-					->setImageFilename($this->faker->randomElement(self::$articleImages))
+					->setImageFilename($imageFilename)
 				;
 
 				$tags = $this->getRandomReferences('main_tags', $this->faker->numberBetween(0, 5));
