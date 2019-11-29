@@ -64,13 +64,7 @@ EOF
 					$article->setPublishedAt($this->faker->dateTimeBetween('-100 days', '-1 days'));
 				}
 
-                $randomImage = $this->faker->randomElement(self::$articleImages);
-                $fs = new Filesystem();
-                $targetPath = sys_get_temp_dir().'/'.$randomImage;
-                $fs->copy(__DIR__.'/images/'.$randomImage, $targetPath, true);
-
-                $imageFilename = $this->uploaderHelper
-                    ->uploadArticleImage(new File($targetPath));
+                $imageFilename = $this->fakeUploadImage();
 
 				$article->setAuthor($this->getRandomReference('main_users'))
 					->setHeartCount($this->faker->numberBetween(5, 100))
@@ -94,4 +88,14 @@ EOF
 			UserFixture::class,
 		];
 	}
+
+	private function fakeUploadImage(): string {
+        $randomImage = $this->faker->randomElement(self::$articleImages);
+        $fs = new Filesystem();
+        $targetPath = sys_get_temp_dir().'/'.$randomImage;
+        $fs->copy(__DIR__.'/images/'.$randomImage, $targetPath, true);
+
+        return $this->uploaderHelper
+            ->uploadArticleImage(new File($targetPath));
+    }
 }
