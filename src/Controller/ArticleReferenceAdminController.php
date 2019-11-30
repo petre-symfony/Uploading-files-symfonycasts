@@ -96,6 +96,8 @@ class ArticleReferenceAdminController extends BaseController {
             stream_copy_to_stream($filestream, $outputStream);
         });
 
+        $response->headers->set('Content-Type', $reference->getMimeType());
+        
         return $response;
     }
 }
