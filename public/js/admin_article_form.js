@@ -64,7 +64,10 @@ class ReferenceList {
       url: '/admin/article/references/' + id,
       method: 'DELETE'
     }).then(() => {
-
+      this.references = this.references.filter(reference => {
+        return reference.id !== id;
+      });
+      this.render();
     });
   }
 
