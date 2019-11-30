@@ -24,10 +24,10 @@ class UploaderHelper {
     private $filesystem;
 
 	public function __construct(
-        FilesystemInterface $filesystem,
+        FilesystemInterface $publicUploadFilesystem,
 		RequestStackContext  $requestStackContext
 	) {
-        $this->filesystem = $filesystem;
+        $this->filesystem = $publicUploadFilesystem;
 		$this->requestStackContext = $requestStackContext;
 	}
 

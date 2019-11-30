@@ -20,6 +20,7 @@ services:
     bind:
       $markdownLogger: '@monolog.logger.markdown'
       $isDebug: '%kernel.debug%'
+      $publicUploadFilesystem: '@oneup_flysystem.public_uploads_filesystem_filesystem'
 
   # custom aliases for autowiring
   Nexy\Slack\Client: '@nexy_slack.client'
