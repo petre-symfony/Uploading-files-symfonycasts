@@ -87,7 +87,14 @@ class ArticleReferenceAdminController extends BaseController {
      * @IsGranted("MANAGE", subject="article")
      */
     public function getArticleReferences(Article $article){
-        return $this->json($article->getArticleReferences());
+        return $this->json(
+            $article->getArticleReferences(),
+            200,
+            [],
+            [
+                'groups' => ['main']
+            ]
+        );
     }
 
     /**
