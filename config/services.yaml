@@ -6,6 +6,8 @@
 parameters:
   cache_adapter: cache.adapter.apcu
   locale: 'en'
+  uploads_dir_name: 'uploads'
+  uploads_base_uri: '/%uploads_dir_name%'
 
 services:
   # default configuration for services in *this* file
