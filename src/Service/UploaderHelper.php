@@ -51,10 +51,17 @@ class UploaderHelper {
 
         $stream = fopen($file->getPathname(), 'r');
 
-        $this->filesystem->writeStream(
+        $result = $this->filesystem->writeStream(
             self::ARTICLE_IMAGE.'/'.$newFilename,
             $stream
 		);
+
+        if($result === false){
+            throw new \Exception(sprintf(
+                "Could not write uploaded file %s",
+                $newFilename
+            ));
+        }
 
         if(is_resource($stream)){
             fclose($stream);
@@ -62,7 +69,13 @@ class UploaderHelper {
 
         if($existingFilename){
             try {
-                $this->filesystem->delete(self::ARTICLE_IMAGE . '/' . $existingFilename);
+                $result = $this->filesystem->delete(self::ARTICLE_IMAGE . '/' . $existingFilename);
+                if($result === false){
+                    throw new \Exception(sprintf(
+                        "Could not write uploaded file %s",
+                        $newFilename
+                    ));
+                }
             }  catch(FileNotFoundException $e){
                 $this->logger->alert(sprintf(
                     'Old uploaded file "%s" was missing when trying to delete',
