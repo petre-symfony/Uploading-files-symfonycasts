@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\File;
@@ -123,8 +124,19 @@ class ArticleReferenceAdminController extends BaseController {
      * @Route("/admin/article/references/{id}", name="admin_article_delete_reference", methods={"DELETE"})
      *
      */
-    public function deleteArticleReference(ArticleReference $reference){
+    public function deleteArticleReference(
+        ArticleReference $reference,
+        UploaderHelper $uploaderHelper,
+        EntityManagerInterface $entityManager
+    ){
         $article = $reference->getArticle();
         $this->denyAccessUnlessGranted('MANAGE', $article);
+
+        $entityManager->remove($reference);
+        $entityManager->flush();
+
+        $uploaderHelper->deleteFile($reference->getFilePath(), false);
+
+        return new Response(null, 204);
     }
 }
