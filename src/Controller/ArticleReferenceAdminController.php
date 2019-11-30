@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Service\UploaderHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +20,8 @@ class ArticleReferenceAdminController extends BaseController {
 	public function uploadArticleReference(
 		Article $article,
 		Request $request,
-        UploaderHelper $uploaderHelper
+        UploaderHelper $uploaderHelper,
+        EntityManagerInterface $entityManager
 	){
         /**
          * @var UploadedFile $uploadedFile
@@ -27,5 +29,17 @@ class ArticleReferenceAdminController extends BaseController {
         $uploadedFile=$request->files->get('reference');
 
         $filename = $uploaderHelper->uploadArticleReference($uploadedFile);
+
+        $articleReference = new ArticleReference($article);
+        $articleReference->setFilename($filename);
+        $articleReference->setOriginalFilename($uploadedFile->getClientOriginalName() ?? $filename);
+        $articleReference->setMimeType($uploadedFile->getMimeType() ?? 'application/octet-stream');
+
+        $entityManager->persist($articleReference);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_article_edit', [
+            'id' => $article->getId()
+        ]);
 	}
 }
