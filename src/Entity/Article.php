@@ -287,22 +287,4 @@ class Article {
         return $this->articleReferences;
     }
     
-    public function addArticleReference(ArticleReference $articleReference): self {
-        if (!$this->articleReferences->contains($articleReference)) {
-            $this->articleReferences[] = $articleReference;
-            $articleReference->setArticle($this);
-        }
-        return $this;
-    }
-
-    public function removeArticleReference(ArticleReference $articleReference): self {
-        if ($this->articleReferences->contains($articleReference)) {
-            $this->articleReferences->removeElement($articleReference);
-            // set the owning side to null (unless already changed)
-            if ($articleReference->getArticle() === $this) {
-                $articleReference->setArticle(null);
-            }
-        }
-        return $this;
-    }
 }
