@@ -286,5 +286,5 @@ class Article {
     public function getArticleReferences(): Collection {
         return $this->articleReferences;
     }
-    
+
 }
