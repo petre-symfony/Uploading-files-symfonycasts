@@ -102,7 +102,7 @@ class ArticleReferenceAdminController extends BaseController {
             HeaderUtils::DISPOSITION_ATTACHMENT,
             $reference->getOriginalFilename()
         );
-        dd($disposition);
+        $response->headers->set('Content-Disposition', $disposition);
 
         return $response;
     }
