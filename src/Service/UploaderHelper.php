@@ -40,11 +40,17 @@ class UploaderHelper {
 
 		$newFilename = Urlizer::urlize(pathinfo($originalFilename, PATHINFO_FILENAME)) . '-' . uniqid() . '.' . $file->guessExtension();
 
-        $this->filesystem->write(
+        $stream = fopen($file->getPathname(), 'r');
+
+        $this->filesystem->writeStream(
             self::ARTICLE_IMAGE.'/'.$newFilename,
-            file_get_contents($file->getPathname())
+            $stream
 		);
-		
+
+        if(is_resource($stream)){
+            fclose($stream);
+        }
+        
 		return $newFilename;
 	}
 
