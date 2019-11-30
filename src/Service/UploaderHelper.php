@@ -31,7 +31,7 @@ class UploaderHelper {
 		$this->requestStackContext = $requestStackContext;
 	}
 
-	public function uploadArticleImage(File $file):string {
+	public function uploadArticleImage(File $file, ?string $existingFilename):string {
         if($file instanceof UploadedFile) {
             $originalFilename = $file->getClientOriginalName();
         } else {
@@ -50,7 +50,11 @@ class UploaderHelper {
         if(is_resource($stream)){
             fclose($stream);
         }
-        
+
+        if($existingFilename){
+            $this->filesystem->delete(self::ARTICLE_IMAGE . '/' . $existingFilename);
+        }
+
 		return $newFilename;
 	}
 
