@@ -5,7 +5,9 @@ namespace App\Service;
 
 
 use Gedmo\Sluggable\Util\Urlizer;
+use League\Flysystem\FileNotFoundException;
 use League\Flysystem\FilesystemInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Asset\Context\RequestStackContext;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -23,12 +25,19 @@ class UploaderHelper {
      */
     private $filesystem;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
 	public function __construct(
         FilesystemInterface $publicUploadFilesystem,
-		RequestStackContext  $requestStackContext
+		RequestStackContext  $requestStackContext,
+        LoggerInterface $logger
 	) {
         $this->filesystem = $publicUploadFilesystem;
 		$this->requestStackContext = $requestStackContext;
+        $this->logger = $logger;
 	}
 
 	public function uploadArticleImage(File $file, ?string $existingFilename):string {
@@ -52,7 +61,14 @@ class UploaderHelper {
         }
 
         if($existingFilename){
-            $this->filesystem->delete(self::ARTICLE_IMAGE . '/' . $existingFilename);
+            try {
+                $this->filesystem->delete(self::ARTICLE_IMAGE . '/' . $existingFilename);
+            }  catch(FileNotFoundException $e){
+                $this->logger->alert(sprintf(
+                    'Old uploaded file "%s" was missing when trying to delete',
+                    $existingFilename
+                ));
+            }
         }
 
 		return $newFilename;
