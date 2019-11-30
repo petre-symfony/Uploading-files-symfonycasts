@@ -12,6 +12,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ArticleReferenceAdminController extends BaseController {
 	/**
@@ -22,12 +24,24 @@ class ArticleReferenceAdminController extends BaseController {
 		Article $article,
 		Request $request,
         UploaderHelper $uploaderHelper,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        ValidatorInterface $validator
 	){
         /**
          * @var UploadedFile $uploadedFile
          */
         $uploadedFile=$request->files->get('reference');
+
+        $violations = $validator->validate(
+            $uploadedFile,
+            new File([
+                'maxSize' => '1k'
+            ])
+        );
+
+        if($violations->count() > 0){
+            dd($violations);
+        }
 
         $filename = $uploaderHelper->uploadArticleReference($uploadedFile);
 
