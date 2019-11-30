@@ -87,6 +87,8 @@ class ArticleReferenceAdminController extends BaseController {
      * @Route("/admin/article/references/{id}/download", name="admin_article_download_reference", methods={"GET"})
      */
     public function downloadArticleReference(ArticleReference $reference){
+        $article = $reference->getArticle();
+        $this->denyAccessUnlessGranted('MANAGE', $article);
         dd($reference);
     }
 }
