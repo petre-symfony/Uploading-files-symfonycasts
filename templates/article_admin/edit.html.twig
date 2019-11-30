@@ -31,9 +31,7 @@
         </ul>
       <form action="{{ path('admin_article_add_reference', {
         id: article.id
-      }) }}" method="post" enctype="multipart/form-data">
-        <input type="file" name="reference">
-        <button type="submit" class="btn btn-primary btn-sm">Upload</button>
+      }) }}" method="post" enctype="multipart/form-data" class="dropzone">
       </form>
     </div>
   </div>
