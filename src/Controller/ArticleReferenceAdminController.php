@@ -72,7 +72,14 @@ class ArticleReferenceAdminController extends BaseController {
         $entityManager->persist($articleReference);
         $entityManager->flush();
 
-        return $this->json($articleReference);
+        return $this->json(
+            $articleReference,
+            201,
+            [],
+            [
+                'groups' => ["main"]
+            ]
+        );
 	}
 
     /**
