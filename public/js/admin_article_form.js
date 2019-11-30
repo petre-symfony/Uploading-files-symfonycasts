@@ -1,3 +1,5 @@
+Dropzone.autoDiscover = false;
+
 $(document).ready(function() {
   var $locationSelect = $('.js-article-form-location');
   var $specificLocationTarget = $('.js-specific-location-target');
