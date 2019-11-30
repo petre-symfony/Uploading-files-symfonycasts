@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -86,9 +87,15 @@ class ArticleReferenceAdminController extends BaseController {
     /**
      * @Route("/admin/article/references/{id}/download", name="admin_article_download_reference", methods={"GET"})
      */
-    public function downloadArticleReference(ArticleReference $reference){
+    public function downloadArticleReference(ArticleReference $reference, UploaderHelper $uploaderHelper){
         $article = $reference->getArticle();
         $this->denyAccessUnlessGranted('MANAGE', $article);
-        dd($reference);
+        $response = new StreamedResponse(function() use ($reference, $uploaderHelper) {
+            $outputStream = fopen('php://output', 'wb');
+            $filestream = $uploaderHelper->readStream($reference->getFilePath(), false);
+            stream_copy_to_stream($filestream, $outputStream);
+        });
+
+        return $response;
     }
 }
