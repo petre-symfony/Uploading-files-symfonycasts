@@ -118,4 +118,13 @@ class ArticleReferenceAdminController extends BaseController {
 
         return $response;
     }
+
+    /**
+     * @Route("/admin/article/references/{id}", name="admin_article_delete_reference", methods={"DELETE"})
+     *
+     */
+    public function deleteArticleReference(ArticleReference $reference){
+        $article = $reference->getArticle();
+        $this->denyAccessUnlessGranted('MANAGE', $article);
+    }
 }
