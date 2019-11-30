@@ -65,6 +65,9 @@ function initializeDropzone() {
   var dropzone = new Dropzone(formElement, {
     'paramName': 'reference',
     init: function() {
+      this.on('success', function (file, data) {
+        console.log(data);
+      });
       this.on('error', function(file, data) {
         if (data.detail) {
           this.emit('error', file, data.detail);
