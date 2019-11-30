@@ -106,6 +106,19 @@ class UploaderHelper {
         return $resource;
     }
 
+    public function deleteStream(string $path, bool $isPublic){
+        $filesystem = $isPublic ? $this->filesystem : $this->privateFilesystem;
+
+        $result = $filesystem->delete($path);
+
+        if ($result === false) {
+            throw new \Exception(sprintf(
+        'Error deleting "%s"',
+                $path
+            ));
+        }
+    }
+
     private function uploadFile(
         File $file,
         string $directory,
