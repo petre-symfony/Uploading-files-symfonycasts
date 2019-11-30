@@ -135,7 +135,7 @@ class ArticleReferenceAdminController extends BaseController {
         $entityManager->remove($reference);
         $entityManager->flush();
 
-        $uploaderHelper->deleteFile($reference->getFilePath(), false);
+        $uploaderHelper->deleteStream($reference->getFilePath(), false);
 
         return new Response(null, 204);
     }
