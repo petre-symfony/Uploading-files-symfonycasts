@@ -4,6 +4,7 @@ $(document).ready(function() {
   initializeDropzone();
   var $locationSelect = $('.js-article-form-location');
   var $specificLocationTarget = $('.js-specific-location-target');
+  var referenceList = new ReferenceList($('.js-reference-list'));
 
   $locationSelect.on('change', function(e) {
     $.ajax({
