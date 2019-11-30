@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ArticleReferenceAdminController extends BaseController {
@@ -40,7 +41,15 @@ class ArticleReferenceAdminController extends BaseController {
         );
 
         if($violations->count() > 0){
-            dd($violations);
+            /**
+             * @var ConstraintViolation $violation
+             */
+            $violation = $violations[0];
+            $this->addFlash('error', $violation->getMessage());
+
+            return $this->redirectToRoute('admin_article_edit', [
+                'id' => $article->getId()
+            ]);
         }
 
         $filename = $uploaderHelper->uploadArticleReference($uploadedFile);
