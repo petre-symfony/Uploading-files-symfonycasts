@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ArticleReferenceAdminController extends BaseController {
 	/**
@@ -35,19 +36,24 @@ class ArticleReferenceAdminController extends BaseController {
 
         $violations = $validator->validate(
             $uploadedFile,
-            new File([
-                'maxSize' => '5M',
-                'mimeTypes' => [
-                    'image/*',
-                    'application/pdf',
-                    'application/msword',
-                    'application/vnd.ms-excel',
-                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                    'text/plain'
-                ]
-            ])
+            [
+                new NotBlank([
+                    'message' => 'Please select a file to upload'
+                ]),
+                new File([
+                    'maxSize' => '5M',
+                    'mimeTypes' => [
+                        'image/*',
+                        'application/pdf',
+                        'application/msword',
+                        'application/vnd.ms-excel',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                        'text/plain'
+                    ]
+                ])
+            ]
         );
 
         if($violations->count() > 0){
