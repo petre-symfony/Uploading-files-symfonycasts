@@ -24,6 +24,7 @@ class UploaderHelper {
      * @var FilesystemInterface
      */
     private $filesystem;
+    private $privateFilesystem;
 
     /**
      * @var LoggerInterface
@@ -34,11 +35,13 @@ class UploaderHelper {
 
 	public function __construct(
         FilesystemInterface $publicUploadFilesystem,
+        FilesystemInterface $privateUploadFilesystem,
 		RequestStackContext  $requestStackContext,
         LoggerInterface $logger,
         string $uploadedAssetsBaseUrl
 	) {
         $this->filesystem = $publicUploadFilesystem;
+        $this->privateFilesystem = $privateUploadFilesystem;
 		$this->requestStackContext = $requestStackContext;
         $this->logger = $logger;
         $this->publicAssetBaseUrl = $uploadedAssetsBaseUrl;
