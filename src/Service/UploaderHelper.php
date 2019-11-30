@@ -91,6 +91,10 @@ class UploaderHelper {
 		return $newFilename;
 	}
 
+    public function uploadArticleReference(File $file):string{
+        dd($file);
+    }
+    
 	public function getPublicPath(string $path):string{
 		return $this->requestStackContext
 				->getBasePath() . $this->publicAssetBaseUrl .'/'. $path;
