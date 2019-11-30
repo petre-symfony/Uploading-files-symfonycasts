@@ -1,10 +1,11 @@
 Dropzone.autoDiscover = false;
 
 $(document).ready(function() {
-  initializeDropzone();
+  var referenceList = new ReferenceList($('.js-reference-list'));
+
+  initializeDropzone(referenceList);
   var $locationSelect = $('.js-article-form-location');
   var $specificLocationTarget = $('.js-specific-location-target');
-  var referenceList = new ReferenceList($('.js-reference-list'));
 
   $locationSelect.on('change', function(e) {
     $.ajax({
@@ -42,6 +43,12 @@ class ReferenceList {
       this.render();
     })
   }
+
+  addReference(reference) {
+    this.references.push(reference);
+    this.render();
+  }
+
   render() {
     const itemsHtml = this.references.map(reference => {
       return `
@@ -56,7 +63,11 @@ class ReferenceList {
   }
 }
 
-function initializeDropzone() {
+/**
+ *
+ * @param {ReferenceList} referenceList
+ */
+function initializeDropzone(referenceList) {
   var formElement = document.querySelector('.js-reference-dropzone');
   if(!formElement){
     return;
@@ -66,7 +77,7 @@ function initializeDropzone() {
     'paramName': 'reference',
     init: function() {
       this.on('success', function (file, data) {
-        console.log(data);
+        referenceList.addReference(data);
       });
       this.on('error', function(file, data) {
         if (data.detail) {
