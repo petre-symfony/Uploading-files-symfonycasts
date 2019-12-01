@@ -87,7 +87,7 @@ class ReferenceList {
     $.ajax({
         url: '/admin/article/references/' + id,
         method: 'PUT',
-        data: reference
+        data: JSON.stringify(reference)
     });
   }
 
