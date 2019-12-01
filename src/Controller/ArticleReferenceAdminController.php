@@ -122,7 +122,7 @@ class ArticleReferenceAdminController extends BaseController {
         }
 
         $entityManager->flush();
-        
+
         return $this->json(
             $article->getArticleReferences(),
             200,

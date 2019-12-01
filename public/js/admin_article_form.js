@@ -38,7 +38,11 @@ class ReferenceList {
       handle: '.drag-handle',
       animation: 150,
       onEnd: () => {
-        console.log(this.sortable.toArray());
+        $.ajax({
+          url: this.$element.data('url') + '/reorder',
+          method: 'POST',
+          data: JSON.stringify(this.sortable.toArray())
+        });
       }
     });
     this.references = [];
