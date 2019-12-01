@@ -26,7 +26,6 @@ class UploaderHelper {
      * @var FilesystemInterface
      */
     private $filesystem;
-    private $privateFilesystem;
 
     /**
      * @var LoggerInterface
@@ -37,13 +36,11 @@ class UploaderHelper {
 
 	public function __construct(
         FilesystemInterface $publicUploadFilesystem,
-        FilesystemInterface $privateUploadFilesystem,
 		RequestStackContext  $requestStackContext,
         LoggerInterface $logger,
         string $uploadedAssetsBaseUrl
 	) {
         $this->filesystem = $publicUploadFilesystem;
-        $this->privateFilesystem = $privateUploadFilesystem;
 		$this->requestStackContext = $requestStackContext;
         $this->logger = $logger;
         $this->publicAssetBaseUrl = $uploadedAssetsBaseUrl;
@@ -98,10 +95,8 @@ class UploaderHelper {
     /**
      * @return resource
      */
-    public function readStream(string $path, bool $isPublic){
-        $filesystem = $isPublic ? $this->filesystem : $this->privateFilesystem;
-
-        $resource = $filesystem->readStream($path);
+    public function readStream(string $path){
+        $resource = $this->filesystem->readStream($path);
 
         if ($resource === false){
             throw new \Exception(sprintf(
@@ -113,10 +108,9 @@ class UploaderHelper {
         return $resource;
     }
 
-    public function deleteStream(string $path, bool $isPublic){
-        $filesystem = $isPublic ? $this->filesystem : $this->privateFilesystem;
+    public function deleteStream(string $path){
 
-        $result = $filesystem->delete($path);
+        $result = $this->filesystem->delete($path);
 
         if ($result === false) {
             throw new \Exception(sprintf(

@@ -141,7 +141,7 @@ class ArticleReferenceAdminController extends BaseController {
         $this->denyAccessUnlessGranted('MANAGE', $article);
         $response = new StreamedResponse(function() use ($reference, $uploaderHelper) {
             $outputStream = fopen('php://output', 'wb');
-            $filestream = $uploaderHelper->readStream($reference->getFilePath(), false);
+            $filestream = $uploaderHelper->readStream($reference->getFilePath());
             stream_copy_to_stream($filestream, $outputStream);
         });
 
@@ -170,7 +170,7 @@ class ArticleReferenceAdminController extends BaseController {
         $entityManager->remove($reference);
         $entityManager->flush();
 
-        $uploaderHelper->deleteStream($reference->getFilePath(), false);
+        $uploaderHelper->deleteStream($reference->getFilePath());
 
         return new Response(null, 204);
     }
