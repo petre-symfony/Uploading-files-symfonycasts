@@ -128,6 +128,9 @@
     "league/flysystem": {
         "version": "1.0.57"
     },
+    "league/flysystem-aws-s3-v3": {
+        "version": "1.0.23"
+    },
     "michelf/php-markdown": {
         "version": "1.8.0"
     },
