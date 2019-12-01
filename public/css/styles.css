@@ -248,3 +248,13 @@ html {height:100%}
   background-color: #fff;
   margin-top: 10px;
 }
+
+/* SORTABLE */
+
+.sortable-ghost {
+  background-color: lightblue;
+}
+
+.drag-handle {
+  cursor: grab;
+}

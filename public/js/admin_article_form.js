@@ -34,6 +34,10 @@ $(document).ready(function() {
 class ReferenceList {
   constructor($element) {
     this.$element = $element;
+    this.sortable = Sortable.create(this.$element[0], {
+      handle: '.drag-handle',
+      animation: 150
+    });
     this.references = [];
     this.render();
 
@@ -97,6 +101,7 @@ class ReferenceList {
         <li class="list-group-item d-flex justify-content-between align-items-center"
           data-id="${reference.id}"
         >
+          <span class="drag-handle fa fa-reorder"></span>
           <input type="text" value="${reference.originalFilename}"
             class="form-control js-edit-filename"
             style="width: 80px"
