@@ -35,12 +35,12 @@ class UploaderHelper {
     private $publicAssetBaseUrl;
 
 	public function __construct(
-        FilesystemInterface $publicUploadFilesystem,
+        FilesystemInterface $UploadFilesystem,
 		RequestStackContext  $requestStackContext,
         LoggerInterface $logger,
         string $uploadedAssetsBaseUrl
 	) {
-        $this->filesystem = $publicUploadFilesystem;
+        $this->filesystem = $UploadFilesystem;
 		$this->requestStackContext = $requestStackContext;
         $this->logger = $logger;
         $this->publicAssetBaseUrl = $uploadedAssetsBaseUrl;
