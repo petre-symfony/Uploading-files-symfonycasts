@@ -2,12 +2,14 @@
 oneup_flysystem:
     adapters:
         public_uploads_adapter:
-            local:
-                directory: '%kernel.project_dir%/public/%uploads_base_uri%'
+            awss3v3:
+                client: Aws\S3\S3Client
+                bucket: '%env(AWS_S3_ACCESS_BUCKET)%'
 
         private_uploads_adapter:
-            local:
-                directory: '%kernel.project_dir%/var/uploads'
+            awss3v3:
+                client: Aws\S3\S3Client
+                bucket: '%env(AWS_S3_ACCESS_BUCKET)%'
 
     filesystems:
         public_uploads_filesystem:
