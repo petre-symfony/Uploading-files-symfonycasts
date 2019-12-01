@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\ArticleReference;
 use App\Service\UploaderHelper;
+use Aws\S3\S3Client;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -136,23 +137,25 @@ class ArticleReferenceAdminController extends BaseController {
     /**
      * @Route("/admin/article/references/{id}/download", name="admin_article_download_reference", methods={"GET"})
      */
-    public function downloadArticleReference(ArticleReference $reference, UploaderHelper $uploaderHelper){
+    public function downloadArticleReference(
+        ArticleReference $reference,
+        S3Client $s3Client,
+        string $s3BucketName
+    ){
         $article = $reference->getArticle();
         $this->denyAccessUnlessGranted('MANAGE', $article);
-        $response = new StreamedResponse(function() use ($reference, $uploaderHelper) {
-            $outputStream = fopen('php://output', 'wb');
-            $filestream = $uploaderHelper->readStream($reference->getFilePath());
-            stream_copy_to_stream($filestream, $outputStream);
-        });
 
-        $response->headers->set('Content-Type', $reference->getMimeType());
-        $disposition = HeaderUtils::makeDisposition(
+        $cmd = $s3Client->getCommand('GetObject', [
+            'Bucket' => $s3BucketName,
+            'Key' => $reference->getFilePath()
+        ]);
+
+        $request = $s3Client->createPresignedRequest($cmd, '+30 minutes');
+        
+        /*$disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_ATTACHMENT,
             $reference->getOriginalFilename()
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-
-        return $response;
+        );*/
     }
 
     /**
