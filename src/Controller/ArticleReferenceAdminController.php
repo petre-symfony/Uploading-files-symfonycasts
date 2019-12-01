@@ -146,19 +146,21 @@ class ArticleReferenceAdminController extends BaseController {
         $article = $reference->getArticle();
         $this->denyAccessUnlessGranted('MANAGE', $article);
 
-        $cmd = $s3Client->getCommand('GetObject', [
-            'Bucket' => $s3BucketName,
-            'Key' => $reference->getFilePath()
-        ]);
-
-        $request = $s3Client->createPresignedRequest($cmd, '+500 minutes');
-
-        return new RedirectResponse((string) $request->getUri());
-
-        /*$disposition = HeaderUtils::makeDisposition(
+        $disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_ATTACHMENT,
             $reference->getOriginalFilename()
-        );*/
+        );
+
+        $cmd = $s3Client->getCommand('GetObject', [
+            'Bucket' => $s3BucketName,
+            'Key' => $reference->getFilePath(),
+            'ResponseContentType' => $reference->getMimeType(),
+            'ResponseContentDisposition' => $disposition
+        ]);
+
+        $request = $s3Client->createPresignedRequest($cmd, '+30 minutes');
+
+        return new RedirectResponse((string) $request->getUri());
     }
 
     /**
