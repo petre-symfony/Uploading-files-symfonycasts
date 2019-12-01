@@ -5,6 +5,7 @@ namespace App\Service;
 
 
 use Gedmo\Sluggable\Util\Urlizer;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\FilesystemInterface;
 use Psr\Log\LoggerInterface;
@@ -138,14 +139,14 @@ class UploaderHelper {
 
         $newFilename = Urlizer::urlize(pathinfo($originalFilename, PATHINFO_FILENAME)) . '-' . uniqid() . '.' . $file->guessExtension();
 
-        $filesystem = $isPublic ?
-            $this->filesystem : $this->privateFilesystem;
-
         $stream = fopen($file->getPathname(), 'r');
 
-        $result = $filesystem->writeStream(
+        $result = $this->filesystem->writeStream(
             $directory.'/'.$newFilename,
-            $stream
+            $stream,
+            [
+                'visibility' => $isPublic ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE
+            ]
         );
 
         if($result === false){
