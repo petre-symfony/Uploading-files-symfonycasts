@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -150,8 +151,10 @@ class ArticleReferenceAdminController extends BaseController {
             'Key' => $reference->getFilePath()
         ]);
 
-        $request = $s3Client->createPresignedRequest($cmd, '+30 minutes');
-        
+        $request = $s3Client->createPresignedRequest($cmd, '+500 minutes');
+
+        return new RedirectResponse((string) $request->getUri());
+
         /*$disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_ATTACHMENT,
             $reference->getOriginalFilename()
