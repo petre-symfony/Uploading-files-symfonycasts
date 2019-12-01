@@ -161,7 +161,20 @@ class ArticleReferenceAdminController extends BaseController {
             ArticleReference::class,
             'json',
             [
-                'object_to_populate' => $reference
+                'object_to_populate' => $reference,
+                'groups' => ['input']
+            ]
+        );
+
+        $entityManager->persist($reference);
+        $entityManager->flush();
+        
+        return $this->json(
+            $reference,
+            200,
+            [],
+            [
+                'groups' => ['main']
             ]
         );
     }
