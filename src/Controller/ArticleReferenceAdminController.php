@@ -168,7 +168,7 @@ class ArticleReferenceAdminController extends BaseController {
 
         $entityManager->persist($reference);
         $entityManager->flush();
-        
+
         return $this->json(
             $reference,
             200,

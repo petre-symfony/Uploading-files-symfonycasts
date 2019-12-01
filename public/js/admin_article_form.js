@@ -41,6 +41,10 @@ class ReferenceList {
       this.handleReferenceDelete(event);
     });
 
+    this.$element.on('blur', '.js-edit-filename', (event) => {
+      this.handleReferenceFilename(event);
+    });
+
     $.ajax({
       url: this.$element.data('url')
     }).then(data => {
@@ -71,6 +75,21 @@ class ReferenceList {
     });
   }
 
+  handleReferenceFilename(event){
+    const $li = $(event.currentTarget).closest('.list-group-item');
+    const id = $li.data('id');
+    const reference = this.references.find(reference => {
+        return reference.id === id;
+    });
+
+    reference.originalFilename = $(event.currentTarget).val();
+
+    $.ajax({
+        url: '/admin/article/references/' + id,
+        method: 'PUT',
+        data: reference
+    });
+  }
 
   render() {
     const itemsHtml = this.references.map(reference => {
@@ -78,7 +97,10 @@ class ReferenceList {
         <li class="list-group-item d-flex justify-content-between align-items-center"
           data-id="${reference.id}"
         >
-          ${reference.originalFilename}
+          <input type="text" value="${reference.originalFilename}"
+            class="form-control js-edit-filename"
+            style="width: 80px"
+          >
           <span>
             <a href="/admin/article/references/${reference.id}/download"
               class="btn btn-sm btn-link"   
