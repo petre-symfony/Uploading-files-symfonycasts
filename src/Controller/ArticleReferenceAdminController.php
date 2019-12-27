@@ -96,6 +96,11 @@ class ArticleReferenceAdminController extends BaseController {
         $articleReference->setOriginalFilename($originalFilename ?? $filename);
         $articleReference->setMimeType($uploadedFile->getMimeType() ?? 'application/octet-stream');
 
+				if (is_file($uploadedFile->getPathname())) {
+					unlink($uploadedFile->getPathname());
+					dd($uploadedFile->getPathname());
+				}
+
         $entityManager->persist($articleReference);
         $entityManager->flush();
 
