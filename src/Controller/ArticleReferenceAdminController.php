@@ -51,14 +51,16 @@ class ArticleReferenceAdminController extends BaseController {
 							return $this->json($violations, 400);
 						}
 
-					$tmpPath = sys_get_temp_dir().'/sf_upload'.uniqid();
-					file_put_contents($tmpPath, $uploadApiModel->getDecodedData());
-					$uploadedFile = new FileObject($tmpPath);
+						$tmpPath = sys_get_temp_dir().'/sf_upload'.uniqid();
+						file_put_contents($tmpPath, $uploadApiModel->getDecodedData());
+						$uploadedFile = new FileObject($tmpPath);
+						$originalFilename = $uploadApiModel->filename;
 				} else {
 						/**
 						 * @var UploadedFile $uploadedFile
 						 */
 						$uploadedFile = $request->files->get('reference');
+						$originalFilename = $uploadedFile->getClientOriginalName();
 				}
 
         $violations = $validator->validate(
@@ -91,7 +93,7 @@ class ArticleReferenceAdminController extends BaseController {
 
         $articleReference = new ArticleReference($article);
         $articleReference->setFilename($filename);
-        $articleReference->setOriginalFilename($uploadedFile->getClientOriginalName() ?? $filename);
+        $articleReference->setOriginalFilename($originalFilename ?? $filename);
         $articleReference->setMimeType($uploadedFile->getMimeType() ?? 'application/octet-stream');
 
         $entityManager->persist($articleReference);
