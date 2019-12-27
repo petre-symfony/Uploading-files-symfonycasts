@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Api\ArticleReferenceUploadApiModel;
 use App\Entity\Article;
 use App\Entity\ArticleReference;
 use App\Service\UploaderHelper;
@@ -42,6 +43,13 @@ class ArticleReferenceAdminController extends BaseController {
 								ArticleReferenceUploadApiModel::class,
 								'json'
 						);
+
+						$violations = $validator->validate($uploadApiModel);
+						if ($violations->count() > 0) {
+							return $this->json($violations, 400);
+						}
+
+					dd($uploadApiModel);
 				} else {
 						/**
 						 * @var UploadedFile $uploadedFile
