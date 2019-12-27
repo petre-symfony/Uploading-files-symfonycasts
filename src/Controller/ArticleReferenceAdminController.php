@@ -54,7 +54,6 @@ class ArticleReferenceAdminController extends BaseController {
 					$tmpPath = sys_get_temp_dir().'/sf_upload'.uniqid();
 					file_put_contents($tmpPath, $uploadApiModel->getDecodedData());
 					$uploadedFile = new FileObject($tmpPath);
-					dd($uploadedFile);
 				} else {
 						/**
 						 * @var UploadedFile $uploadedFile
