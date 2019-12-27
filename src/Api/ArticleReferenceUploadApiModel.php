@@ -12,4 +12,10 @@ class ArticleReferenceUploadApiModel {
 	 * @Assert\NotBlank()
 	 */
 	private $data;
+	private $decodedData;
+
+	public function setData(?string $data){
+		$this->data = $data;
+		$this->decodedData = base64_decode($data);
+	}
 }
