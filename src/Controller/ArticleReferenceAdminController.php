@@ -26,19 +26,28 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class ArticleReferenceAdminController extends BaseController {
 	/**
 	 * @Route("/admin/article/{id}/references", name="admin_article_add_reference", methods={"POST"})
-	 
+
 	 */
 	public function uploadArticleReference(
 		Article $article,
 		Request $request,
-        UploaderHelper $uploaderHelper,
-        EntityManagerInterface $entityManager,
-        ValidatorInterface $validator
+    UploaderHelper $uploaderHelper,
+    EntityManagerInterface $entityManager,
+    ValidatorInterface $validator,
+		SerializerInterface $serializer
 	){
-        /**
-         * @var UploadedFile $uploadedFile
-         */
-        $uploadedFile=$request->files->get('reference');
+				if ($request->headers->get('Content-Type') === 'application/json') {
+						$uploadApiModel = $serializer->deserialize(
+								$request->getContent(),
+								ArticleReferenceUploadApiModel::class,
+								'json'
+						);
+				} else {
+						/**
+						 * @var UploadedFile $uploadedFile
+						 */
+						$uploadedFile = $request->files->get('reference');
+				}
 
         $violations = $validator->validate(
             $uploadedFile,
