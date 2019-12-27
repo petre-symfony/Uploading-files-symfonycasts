@@ -11,5 +11,5 @@ class ArticleReferenceUploadApiModel {
 	/**
 	 * @Assert\NotBlank()
 	 */
-	public $data;
+	private $data;
 }
