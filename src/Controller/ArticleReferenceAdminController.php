@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class ArticleReferenceAdminController extends BaseController {
 	/**
 	 * @Route("/admin/article/{id}/references", name="admin_article_add_reference", methods={"POST"})
-
+	 * @IsGranted("MANAGE", subject="article")
 	 */
 	public function uploadArticleReference(
 		Article $article,
@@ -98,7 +98,6 @@ class ArticleReferenceAdminController extends BaseController {
 
 				if (is_file($uploadedFile->getPathname())) {
 					unlink($uploadedFile->getPathname());
-					dd($uploadedFile->getPathname());
 				}
 
         $entityManager->persist($articleReference);
