@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\HttpFoundation\File\File as FileObject;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -38,6 +39,7 @@ class ArticleReferenceAdminController extends BaseController {
 		SerializerInterface $serializer
 	){
 				if ($request->headers->get('Content-Type') === 'application/json') {
+						/** @var ArticleReferenceUploadApiModel $uploadApiModel */
 						$uploadApiModel = $serializer->deserialize(
 								$request->getContent(),
 								ArticleReferenceUploadApiModel::class,
@@ -49,7 +51,10 @@ class ArticleReferenceAdminController extends BaseController {
 							return $this->json($violations, 400);
 						}
 
-					dd($uploadApiModel);
+					$tmpPath = sys_get_temp_dir().'/sf_upload'.uniqid();
+					file_put_contents($tmpPath, $uploadApiModel->getDecodedData());
+					$uploadedFile = new FileObject($tmpPath);
+					dd($uploadedFile);
 				} else {
 						/**
 						 * @var UploadedFile $uploadedFile

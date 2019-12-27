@@ -18,4 +18,8 @@ class ArticleReferenceUploadApiModel {
 		$this->data = $data;
 		$this->decodedData = base64_decode($data);
 	}
+
+	public function getDecodedData(): ?string{
+		return $this->decodedData;
+	}
 }
